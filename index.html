@@ -53,24 +53,25 @@
             transform: translateX(-50%);
         }
 
-        .goal-left, .goal-right {
+        .goal-red, .goal-blue {
             position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 10px;
-            height: 30vh;
-            background: linear-gradient(90deg, #ff0000, #ff4500);
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30vw;
+            height: 10px;
             z-index: 5;
             border: 3px solid gold;
             box-shadow: 0 0 15px gold;
         }
 
-        .goal-left {
-            left: 5px;
+        .goal-red {
+            bottom: 5px;
+            background: linear-gradient(90deg, #ff0000, #ff4500);
         }
 
-        .goal-right {
-            right: 5px;
+        .goal-blue {
+            top: 5px;
+            background: linear-gradient(90deg, #0066ff, #00bfff);
         }
 
         .player {
@@ -196,8 +197,8 @@
     <div class="game-container">
         <div class="ice-rink">
             <div class="center-line"></div>
-            <div class="goal-left"></div>
-            <div class="goal-right"></div>
+            <div class="goal-red"></div>
+            <div class="goal-blue"></div>
 
             <div class="score">
                 <span id="score-red">0</span>
@@ -310,16 +311,16 @@
                 puckVy = -Math.abs(puckVy) * 0.7;
             }
 
-            // Check goal (left)
-            if (puckX <= 5 && playerRedY >= 30 && playerRedY <= 70) {
-                gameState.scoreBlue++;
+            // Check goal (bottom) - Baliza Vermelha
+            if (puckY <= 5 && playerBlueY >= 30 && playerBlueY <= 70) {
+                gameState.scoreRed++;
                 updateScore();
                 resetPuck();
             }
 
-            // Check goal (right)
-            if (puckX >= 95 && playerBlueY >= 30 && playerBlueY <= 70) {
-                gameState.scoreRed++;
+            // Check goal (top) - Baliza Azul
+            if (puckY >= 95 && playerRedY >= 30 && playerRedY <= 70) {
+                gameState.scoreBlue++;
                 updateScore();
                 resetPuck();
             }
