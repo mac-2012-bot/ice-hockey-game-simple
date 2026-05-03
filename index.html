@@ -295,24 +295,27 @@
             // Update puck position
             puckX += puckVx * gameState.puckSpeed;
             puckY += puckVy * gameState.puckSpeed;
+            
+            // GARANTIR que a bola nunca sai do tabuleiro - limites absolutos
+            puckX = Math.max(1, Math.min(99, puckX));
+            puckY = Math.max(1, Math.min(99, puckY));
 
-            // Boundary collision with ricochet - garantir que não sai do tabuleiro ou das áreas
-            // Limites mais restritivos para garantir que a bola fica sempre dentro das áreas
-            if (puckX <= 2) {
-                puckX = 2;
-                puckVx = Math.abs(puckVx) * 0.6; // Ricochete na parede esquerda
+            // Boundary collision with ricochete - limites garantidos
+            if (puckX <= 1) {
+                puckX = 1;
+                puckVx = Math.abs(puckVx) * 0.5; // Ricochete na parede esquerda
             }
-            if (puckX >= 98) {
-                puckX = 98;
-                puckVx = -Math.abs(puckVx) * 0.6; // Ricochete na parede direita
+            if (puckX >= 99) {
+                puckX = 99;
+                puckVx = -Math.abs(puckVx) * 0.5; // Ricochete na parede direita
             }
-            if (puckY <= 2) {
-                puckY = 2;
-                puckVy = Math.abs(puckVy) * 0.6; // Ricochete no topo
+            if (puckY <= 1) {
+                puckY = 1;
+                puckVy = Math.abs(puckVy) * 0.5; // Ricochete no topo
             }
-            if (puckY >= 98) {
-                puckY = 98;
-                puckVy = -Math.abs(puckVy) * 0.6; // Ricochete na base
+            if (puckY >= 99) {
+                puckY = 99;
+                puckVy = -Math.abs(puckVy) * 0.5; // Ricochete na base
             }
 
             // Check goal (bottom) - Baliza Vermelha (jogador Azul marca)
