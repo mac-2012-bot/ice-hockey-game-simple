@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ice Hockey - Jogo Simples</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            touch-action: manipulation;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+            color: white;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .ice-rink {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90vw;
+            height: 80vh;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+        }
+
+        .center-line {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 2px;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: translateX(-50%);
+        }
+
+        .goal-left, .goal-right {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 10px;
+            height: 30vh;
+            background: linear-gradient(90deg, #ff0000, #ff4500);
+            z-index: 5;
+            border: 3px solid gold;
+            box-shadow: 0 0 15px gold;
+        }
+
+        .goal-left {
+            left: 5px;
+        }
+
+        .goal-right {
+            right: 5px;
+        }
+
+        .player {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            touch-action: none;
+            z-index: 10;
+        }
+
+        .player.red {
+            background: linear-gradient(135deg, #ff0000, #ff4500);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+        }
+
+        .player.blue {
+            background: linear-gradient(135deg, #0066ff, #00bfff);
+            box-shadow: 0 0 15px rgba(0, 102, 255, 0.8);
+        }
+
+        .puck {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #000;
+            box-shadow: 0 0 20px rgba(255, 255, 0, 0.9);
+            cursor: pointer;
+            touch-action: none;
+            z-index: 8;
+        }
+
+        .score {
+            position: absolute;
+            top: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.9);
+            z-index: 20;
+        }
+
+        .controls-info {
+            position: absolute;
+            bottom: 20px;
+            width: 90%;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            z-index: 20;
+        }
+
+        .game-over {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 30;
+        }
+
+        .game-over h2 {
+            font-size: 3.5rem;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px gold;
+            color: gold;
+        }
+
+        .game-over p {
+            font-size: 1.8rem;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .restart-btn {
+            padding: 20px 40px;
+            background: gold;
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .restart-btn:hover {
+            background: #ffd700;
+            transform: scale(1.1);
+            box-shadow: 0 0 20px gold;
+        }
+
+        @media (max-width: 768px) {
+            .player {
+                width: 25px;
+                height: 25px;
+            }
+
+            .puck {
+                width: 12px;
+                height: 12px;
+            }
+
+            .score {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="ice-rink">
+            <div class="center-line"></div>
+            <div class="goal-left"></div>
+            <div class="goal-right"></div>
+            
+            <div class="score">
+                <span id="score-red">0</span>
+                <span>:</span>
+                <span id="score-blue">0</span>
+            </div>
+            
+            <div class="player red" id="player-red" style="left: 10vw; bottom: 40vh;"></div>
+            <div class="player blue" id="player-blue" style="right: 10vw; bottom: 60vh;"></div>
+            <div class="puck" id="puck"></div>
+            
+            <div class="controls-info">
+                TOCA NO JOGADOR PARA MOVER (Esquerda: Vermelho | Direita: Azul)
+            </div>
+        </div>
+        
+        <div class="game-over" id="game-over">
+            <h2 id="game-over-title">FIM DE JOGO</h2>
+            <p id="game-over-result"></p>
+            <button class="restart-btn" id="restart-btn">JOGAR NOVAMENTE</button>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        const gameState = {
+            scoreRed: 0,
+            scoreBlue: 0,
+            gameActive: true,
+            puckSpeed: 2.5
+        };
+
+        // DOM elements
+        const playerRed = document.getElementById('player-red');
+        const playerBlue = document.getElementById('player-blue');
+        const puck = document.getElementById('puck');
+        const scoreRed = document.getElementById('score-red');
+        const scoreBlue = document.getElementById('score-blue');
+        const gameOver = document.getElementById('game-over');
+        const gameOverTitle = document.getElementById('game-over-title');
+        const gameOverResult = document.getElementById('game-over-result');
+        const restartBtn = document.getElementById('restart-btn');
+
+        // Player positions
+        let playerRedX = 10;
+        let playerBlueX = 90;
+        let playerRedY = 40;
+        let playerBlueY = 60;
+
+        // Puck position and velocity
+        let puckX = 50;
+        let puckY = 50;
+        let puckVx = 2;
+        let puckVy = 1;
+
+        // Initialize game
+        function initGame() {
+            gameState.scoreRed = 0;
+            gameState.scoreBlue = 0;
+            gameState.gameActive = true;
+            gameState.puckSpeed = 2.5;
+            
+            playerRedX = 10;
+            playerBlueX = 90;
+            playerRedY = 40;
+            playerBlueY = 60;
+            puckX = 50;
+            puckY = 50;
+            puckVx = (Math.random() > 0.5 ? 1 : -1) * (1.5 + Math.random() * 1);
+            puckVy = (Math.random() > 0.5 ? 1 : -1) * (1 + Math.random() * 0.5);
+            
+            updateScore();
+            gameOver.style.display = 'none';
+        }
+
+        // Update score display
+        function updateScore() {
+            scoreRed.textContent = gameState.scoreRed;
+            scoreBlue.textContent = gameState.scoreBlue;
+            
+            // Check win condition
+            if (gameState.scoreRed >= 5 || gameState.scoreBlue >= 5) {
+                setTimeout(endGame, 300);
+            }
+        }
+
+        // Game loop
+        function gameLoop() {
+            if (!gameState.gameActive) return;
+
+            // Update puck position
+            puckX += puckVx * gameState.puckSpeed;
+            puckY += puckVy * gameState.puckSpeed;
+
+            // Boundary collision with ricochet
+            if (puckX <= 5) {
+                puckX = 5;
+                puckVx = Math.abs(puckVx) * 0.8;
+            }
+            if (puckX >= 95) {
+                puckX = 95;
+                puckVx = -Math.abs(puckVx) * 0.8;
+            }
+            if (puckY <= 5) {
+                puckY = 5;
+                puckVy = Math.abs(puckVy) * 0.8;
+            }
+            if (puckY >= 95) {
+                puckY = 95;
+                puckVy = -Math.abs(puckVy) * 0.8;
+            }
+
+            // Check goal (left)
+            if (puckX <= 5 && playerRedY >= 30 && playerRedY <= 70) {
+                gameState.scoreBlue++;
+                updateScore();
+                resetPuck();
+            }
+
+            // Check goal (right)
+            if (puckX >= 95 && playerBlueY >= 30 && playerBlueY <= 70) {
+                gameState.scoreRed++;
+                updateScore();
+                resetPuck();
+            }
+
+            // Player-puck collision
+            const puckRect = puck.getBoundingClientRect();
+            const redRect = playerRed.getBoundingClientRect();
+            const blueRect = playerBlue.getBoundingClientRect();
+
+            if (checkCollision(redRect, puckRect)) {
+                const angle = Math.atan2(puckY - playerRedY, puckX - playerRedX);
+                puckVx = Math.cos(angle) * 3;
+                puckVy = Math.sin(angle) * 3;
+            }
+
+            if (checkCollision(blueRect, puckRect)) {
+                const angle = Math.atan2(puckY - playerBlueY, puckX - playerBlueX);
+                puckVx = Math.cos(angle) * 3;
+                puckVy = Math.sin(angle) * 3;
+            }
+
+            // Update positions
+            playerRed.style.left = `${playerRedX}vw`;
+            playerRed.style.bottom = `${playerRedY}vh`;
+            playerBlue.style.left = `${playerBlueX}vw`;
+            playerBlue.style.bottom = `${playerBlueY}vh`;
+            puck.style.left = `${puckX}vw`;
+            puck.style.bottom = `${puckY}vh`;
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Check collision between two elements
+        function checkCollision(rect1, rect2) {
+            return !(
+                rect1.right < rect2.left ||
+                rect1.left > rect2.right ||
+                rect1.bottom < rect2.top ||
+                rect1.top > rect2.bottom
+            );
+        }
+
+        // Reset puck to center
+        function resetPuck() {
+            puckX = 50;
+            puckY = 50;
+            puckVx = (Math.random() > 0.5 ? 1 : -1) * (1.5 + Math.random() * 1);
+            puckVy = (Math.random() > 0.5 ? 1 : -1) * (1 + Math.random() * 0.5);
+        }
+
+        // End game
+        function endGame() {
+            gameState.gameActive = false;
+            
+            if (gameState.scoreRed > gameState.scoreBlue) {
+                gameOverTitle.textContent = 'VERMELHO VENCE!';
+                gameOverResult.textContent = `Vermelho: ${gameState.scoreRed} - Azul: ${gameState.scoreBlue}`;
+            } else if (gameState.scoreBlue > gameState.scoreRed) {
+                gameOverTitle.textContent = 'AZUL VENCE!';
+                gameOverResult.textContent = `Azul: ${gameState.scoreBlue} - Vermelho: ${gameState.scoreRed}`;
+            } else {
+                gameOverTitle.textContent = 'EMPATE!';
+                gameOverResult.textContent = `${gameState.scoreRed} - ${gameState.scoreBlue}`;
+            }
+            
+            gameOver.style.display = 'flex';
+        }
+
+        // Touch controls - TOCA NO JOGADOR PARA MOVER
+        playerRed.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            playerRedX = 10 + Math.random() * 20;
+        });
+
+        playerBlue.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            playerBlueX = 70 + Math.random() * 20;
+        });
+
+        // Mouse controls
+        playerRed.addEventListener('mousedown', () => {
+            playerRedX = 10 + Math.random() * 20;
+        });
+
+        playerBlue.addEventListener('mousedown', () => {
+            playerBlueX = 70 + Math.random() * 20;
+        });
+
+        // Restart game
+        restartBtn.addEventListener('click', () => {
+            initGame();
+            requestAnimationFrame(gameLoop);
+        });
+
+        // Start game
+        initGame();
+        requestAnimationFrame(gameLoop);
+    </script>
+</body>
+</html>
