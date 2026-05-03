@@ -296,35 +296,34 @@
             puckX += puckVx * gameState.puckSpeed;
             puckY += puckVy * gameState.puckSpeed;
 
-            // Boundary collision with ricochet - garantir que não sai do tabuleiro
-            // Ricochete nas paredes laterais (não balizas)
-            if (puckX <= 3) {
-                puckX = 3;
-                puckVx = Math.abs(puckVx) * 0.7; // Ricochete na parede esquerda
+            // Boundary collision with ricochet - garantir que não sai do tabuleiro ou das áreas
+            // Limites mais restritivos para garantir que a bola fica sempre dentro das áreas
+            if (puckX <= 2) {
+                puckX = 2;
+                puckVx = Math.abs(puckVx) * 0.6; // Ricochete na parede esquerda
             }
-            if (puckX >= 97) {
-                puckX = 97;
-                puckVx = -Math.abs(puckVx) * 0.7; // Ricochete na parede direita
+            if (puckX >= 98) {
+                puckX = 98;
+                puckVx = -Math.abs(puckVx) * 0.6; // Ricochete na parede direita
             }
-            // Ricochete no topo e base (paredes superior/inferior) - garantir limites
-            if (puckY <= 3) {
-                puckY = 3;
-                puckVy = Math.abs(puckVy) * 0.7;
+            if (puckY <= 2) {
+                puckY = 2;
+                puckVy = Math.abs(puckVy) * 0.6; // Ricochete no topo
             }
-            if (puckY >= 97) {
-                puckY = 97;
-                puckVy = -Math.abs(puckVy) * 0.7;
+            if (puckY >= 98) {
+                puckY = 98;
+                puckVy = -Math.abs(puckVy) * 0.6; // Ricochete na base
             }
 
-            // Check goal (bottom) - Baliza Vermelha
-            if (puckY <= 5 && playerBlueY >= 30 && playerBlueY <= 70) {
+            // Check goal (bottom) - Baliza Vermelha (jogador Azul marca)
+            if (puckY <= 5 && playerBlueY >= 10 && playerBlueY <= 90) {
                 gameState.scoreRed++;
                 updateScore();
                 resetPuck();
             }
 
-            // Check goal (top) - Baliza Azul
-            if (puckY >= 95 && playerRedY >= 30 && playerRedY <= 70) {
+            // Check goal (top) - Baliza Azul (jogador Vermelho marca)
+            if (puckY >= 95 && playerRedY >= 10 && playerRedY <= 90) {
                 gameState.scoreBlue++;
                 updateScore();
                 resetPuck();
