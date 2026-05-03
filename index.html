@@ -294,14 +294,16 @@
             puckY += puckVy * gameState.puckSpeed;
 
             // Boundary collision with ricochet - velocidade reduzida
+            // Ricochete nas paredes laterais (não balizas)
             if (puckX <= 5) {
                 puckX = 5;
-                puckVx = Math.abs(puckVx) * 0.7;
+                puckVx = Math.abs(puckVx) * 0.7; // Ricochete na parede esquerda
             }
             if (puckX >= 95) {
                 puckX = 95;
-                puckVx = -Math.abs(puckVx) * 0.7;
+                puckVx = -Math.abs(puckVx) * 0.7; // Ricochete na parede direita
             }
+            // Ricochete no topo e base (paredes superior/inferior)
             if (puckY <= 5) {
                 puckY = 5;
                 puckVy = Math.abs(puckVy) * 0.7;

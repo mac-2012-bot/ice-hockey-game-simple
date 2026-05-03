@@ -14,6 +14,7 @@ Uma versão simplificada e 100% funcional do jogo de hóquei no gelo para telem�
 - **Primeiro a 5 golos ganha!**
 - **Disco ricocheteia nas paredes!** 🔄
 - **Baliza Vermelha em BAIXO, Baliza Azul em CIMA!** 🎯
+- **Disco ricocheteia em TODAS as paredes** (laterais, topo, base) 🔄
 - **Disco mais lento** para jogo mais equilibrado 🐢
 
 ## 🎮 Funcionalidades:
