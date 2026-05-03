@@ -5,10 +5,10 @@ Uma versão simplificada e 100% funcional do jogo de hóquei no gelo para telem�
 ## 📱 Como jogar (FUNCIONA 100%):
 
 ### Controlos SIMPLES:
-- **TOCA NO JOGADOR VERMELHO** (lado esquerdo) → Move-o aleatoriamente
-- **TOCA NO JOGADOR AZUL** (lado direito) → Move-o aleatoriamente
+- **JOGADOR VERMELHO em BAIXO** → TOCA nele para o mover
+- **JOGADOR AZUL em CIMA** → TOCA nele para o mover
 - **O disco já está em movimento!** 🔥
-- **Tenta marcar golos** nas balizas laterais
+- **Tenta marcar golos** nas balizas (Vermelha em baixo, Azul em cima)
 
 ### Objetivo:
 - **Primeiro a 5 golos ganha!**
