@@ -5,8 +5,8 @@ Uma versão simplificada e 100% funcional do jogo de hóquei no gelo para telem�
 ## 📱 Como jogar (FUNCIONA 100%):
 
 ### Controlos SIMPLES:
-- **JOGADOR VERMELHO em BAIXO** → TOCA nele para o mover
-- **JOGADOR AZUL em CIMA** → TOCA nele para o mover
+- **JOGADOR VERMELHO em BAIXO** → Só se move na metade INFERIOR da pista
+- **JOGADOR AZUL em CIMA** → Só se move na metade SUPERIOR da pista
 - **O disco já está em movimento!** 🔥
 - **Tenta marcar golos** nas balizas (Vermelha em baixo, Azul em cima)
 
