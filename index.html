@@ -414,26 +414,42 @@
         }
 
         // Touch controls - TOCA NO JOGADOR PARA MOVER
-        // Touch controls - jogadores só se movem na sua área
+        // Touch controls - jogadores SE MEXEM quando tocados
         playerRed.addEventListener('touchstart', (e) => {
             e.preventDefault();
-            // Jogador Vermelho só se move na metade inferior (50% a 100% da largura)
-            playerRedX = 10 + Math.random() * 40; // 10-50vw (metade inferior)
-        });
+            // Jogador Vermelho move-se para a posição do toque no lado esquerdo
+            const touchX = e.touches[0].clientX;
+            const touchPercent = (touchX / window.innerWidth) * 100;
+            if (touchPercent < 50) { // Só responde no lado esquerdo
+                playerRedX = Math.max(5, Math.min(45, 10 + (touchPercent / 50) * 35));
+            }
+        }, { passive: false });
 
         playerBlue.addEventListener('touchstart', (e) => {
             e.preventDefault();
-            // Jogador Azul só se move na metade superior (50% a 100% da largura)
-            playerBlueX = 50 + Math.random() * 40; // 50-90vw (metade superior)
+            // Jogador Azul move-se para a posição do toque no lado direito
+            const touchX = e.touches[0].clientX;
+            const touchPercent = (touchX / window.innerWidth) * 100;
+            if (touchPercent >= 50) { // Só responde no lado direito
+                playerBlueX = Math.max(55, Math.min(95, 55 + ((touchPercent - 50) / 50) * 40));
+            }
+        }, { passive: false });
+
+        // Mouse controls - jogadores SE MEXEM quando clicados
+        playerRed.addEventListener('mousedown', (e) => {
+            const mouseX = e.clientX;
+            const mousePercent = (mouseX / window.innerWidth) * 100;
+            if (mousePercent < 50) {
+                playerRedX = Math.max(5, Math.min(45, 10 + (mousePercent / 50) * 35));
+            }
         });
 
-        // Mouse controls - jogadores só se movem na sua área
-        playerRed.addEventListener('mousedown', () => {
-            playerRedX = 10 + Math.random() * 40;
-        });
-
-        playerBlue.addEventListener('mousedown', () => {
-            playerBlueX = 50 + Math.random() * 40;
+        playerBlue.addEventListener('mousedown', (e) => {
+            const mouseX = e.clientX;
+            const mousePercent = (mouseX / window.innerWidth) * 100;
+            if (mousePercent >= 50) {
+                playerBlueX = Math.max(55, Math.min(95, 55 + ((mousePercent - 50) / 50) * 40));
+            }
         });
 
         // Restart game
